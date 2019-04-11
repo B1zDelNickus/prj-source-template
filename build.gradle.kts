@@ -8,8 +8,8 @@ spectrumMultimodule(version) {
 tasks.register("set-source-name") {
     group = "sources"
     doFirst {
-        val name = (rootProject.findProperty("source-name") ?: rootProject.name).toString()
-        val packageName = name.replace("-", "_")
+        val sourceName = (rootProject.findProperty("source-name") ?: rootProject.name).toString()
+        val packageName = sourceName.replace("-", "_")
         subprojects {
             this.ensurePackage("codes.spectrum.sources.$packageName.$name")
         }
