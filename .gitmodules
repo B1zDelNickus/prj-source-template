@@ -1,0 +1,4 @@
+[submodule "buildSrc"]
+	path = buildSrc
+	url = ../../buildSrc
+	branch = master	
