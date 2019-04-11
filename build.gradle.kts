@@ -23,6 +23,11 @@ val setupSource = tasks.register("setup-source") {
         subprojects {
             this.ensurePackage("codes.spectrum.sources.$packageName.$name")
         }
+        val map = mapOf(
+            "SOURCE_NAME" to rootProject.ensureProperty("source-name"),
+            "SOURCE_TITLE" to rootProject.ensureProperty("source-title")
+        )
+        File(rootProject.projectDir, "README.md").interpolate(map)
     }
 }
 
