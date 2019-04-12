@@ -1,2 +1,2 @@
-rootProject.name = "source"
-include("model", "provider", "client", "service", "db", "transport", "agent")
+rootProject.name = rootProject.projectDir.name
+include("test","model", "provider", "client", "service", "db", "transport", "agent")
