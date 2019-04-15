@@ -1,1 +1,1 @@
-setupAsService()
+
