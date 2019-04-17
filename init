@@ -5,3 +5,4 @@ cd buildSrc
 git checkout master
 cd ..
 ./upbuilder
+./gradlew reset-template
