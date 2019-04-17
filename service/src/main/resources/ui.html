@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Минимальный маппинг для включения в отчет</title>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body className="container col align-items-center">
+
+<div className="row">
+    <h1>
+        Источник - demoname (demo)
+    </h1>
+    <p>Полную документацию можно посмотреть <a href="./doc">здесь</a></p>
+</div>
+<div className="row">
+    <div id="source-page" class="col">
+
+    </div>
+</div>
+
+
+<script type="text/babel">
+
+
+class SourceServicePage extends React.Component {
+   constructor(props) {
+    super(props);
+    const baseurl = window.location.hostname;
+    this.systems = {
+       DEV : {
+          name:"Стейдж",
+          url:"http://rest-dev.sources.ssc.int"
+       },
+       PROD : {
+          name:"Прод",
+          url:"https://sources-extremists.spectrum.codes"
+       },
+       LOCAL : {
+          name:"Локальный",
+          url:"http://127.0.0.1:8080"
+       }
+    }
+    const sys = (Object.entries(this.systems).find((e)=>e[1].url.includes(baseurl)) || ["DEV"])[0];
+    this.defaultForm = {case:'', sys:sys, query:"", error:false,delay:0, timeout:0}
+    this.state = {form:{case:'', sys:sys, query:"", error:false,delay:0, timeout:0}, data :null};
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.cases = {
+        /* setup your cases */
+        NONE : {
+          name:"Пользовательский"
+        },
+        DEFAULT : {
+          name:"По умолчанию",
+          query:"Hello"
+        },
+        ERROR : {
+          name:"Имитация ошибки",
+          error:true
+        },
+        TIMEOUT: {
+          name:"Имитация таймаута",
+          timeout: 10,
+          delay:100
+        }
+
+      }
+  }
+
+  componentDidMount(){
+    this.handleChange({name:"case",value:"DEFAULT"});
+  }
+
+  handleChange(event) {
+    
+    const {name,value} = event.target || event;
+    const form = this.state.form;
+    form[name] = value;
+    if(name=="case"){
+      const _case = this.cases[value];
+      for(var p of Object.entries(this.state.form)){
+        if(p[0]=="sys")continue;
+        if(p[0]=="case")continue;
+        this.state.form[p[0]] = _case[p[0]] || this.defaultForm[p[0]];
+      }
+    }else if(name!='sys'){
+      form["case"] = "NONE";
+    }
+    this.setState({form});
+    if(name=='case' || name=='sys'){
+      this.handleSubmit();
+    }
+  }
+
+  prepareQuery(){
+    var self = this;
+     var result = {
+       timeout: self.state.form.timeout,
+       query : {
+          query : self.state.form.query
+       },
+       debug : {  
+        throwError : self.state.form.error,
+        sourceDelay : self.state.form.delay       
+       }
+     }
+     return result;
+
+  }
+
+  handleSubmit(event) {
+    const self = this;
+    event && event.preventDefault();
+    const url = this.systems[this.state.form.sys].url;
+    fetch(`${url}/api/v1/sources/demo/cli/execute`,{
+        method:"POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(this.prepareQuery())
+    })
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+        self.setState({data:myJson})
+      
+  });
+  }
+
+  _input(code,name,values,type){
+      const id = code + "_control";
+      return <div className="form-group" key={code}>
+        <label htmlFor={id}>{name}</label>
+        
+          
+              { !values && (<input id={id}  className="form-control" type={type||"text"} name={code} value={this.state.form[code]}  onChange={this.handleChange} />) }
+              { values && (
+                <select id={id} name={code} className="form-control" value={this.state.form[code]} onChange={this.handleChange} >
+                {
+                  Object.entries(values).map((entry)=>{
+                      return (
+                        <option key={entry[0]} value={entry[0]}>{entry[1]["name"]||entry[1]}</option>            
+                      )
+                  })
+                }
+                </select>
+              )}
+        
+      </div>
+  }
+  
+
+  render() {
+    
+
+    return (
+     <div className="row">
+      
+        <div className="col-2 bg-light p-3">
+        <form onSubmit={this.handleSubmit}>
+        {this._input("case","Кейс", this.cases)}
+        {this._input("sys","Система", this.systems)}
+        {
+          Object.entries(this.state.form).map((entry,i)=>{
+            if(entry[0]=="case")return null;
+            if(entry[0]=="sys")return null;
+            return this._input(entry[0],entry[0])
+          })       
+        }
+      <div>
+      <input type="submit" value="Выполнить запрос" />
+      </div>
+      
+    </form>
+  </div>
+
+
+
+    <div id="example" className="col-6" >
+        {this.state.data && new SourceBlock(this.state.data).render()}
+    </div>
+
+     </div>
+    );
+  }
+
+}
+
+class SourceBlock {
+    constructor(data){
+        this.data = data;
+    }
+
+
+    render() {
+        return (
+          <div className="results col"> 
+              <h1>Результаты обработки</h1>
+              <table>
+              <tbody>
+                  <tr>
+                    <td>Статус</td>
+                    <td>{this.data.result.status}</td>
+                  </tr>
+                  { !this.data.result.error && this.data.result.status=="OK" &&
+                  <tr>
+                    <td>Ответ</td>
+                    <td>{this.data.result.data.answer}</td>
+                  </tr>
+                  }
+                  { this.data.result.error && 
+                  <tr>
+                    <td>Ошибка</td>
+                    <td>{JSON.stringify(this.data.result.error)}</td>
+                  </tr>
+                  }
+                  </tbody>
+              </table>
+          </div>
+      );
+
+    }
+}
+
+
+ReactDOM.render(
+  <SourceServicePage/>,
+  document.getElementById("source-page")
+);
+
+
+</script>
+</body>
+
+</html>
