@@ -24,5 +24,6 @@ gradle-app.setting
 
 **/tmp
 /tmp
+.kotlintest
 
         
