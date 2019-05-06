@@ -9,9 +9,9 @@ import codes.spectrum.sources.demo.model.DemoData
 import codes.spectrum.sources.demo.model.DemoQuery
 
 
-interface IDemoSource : ISourceHandler<DemoQuery, DemoData> {
+interface IDemoSource : ISourceHandler<DemoContext> {
     object Empty : IDemoSource {
-        override suspend fun execute(context: SourceContext<DemoQuery,DemoData>, config: IConfig){
+        override suspend fun execute(context: DemoContext, config: IConfig) {
 
         }
     }
@@ -19,6 +19,6 @@ interface IDemoSource : ISourceHandler<DemoQuery, DemoData> {
 
 class DemoRequest(query:DemoQuery = DemoQuery() ):SourceQuery<DemoQuery>(query=query)
 class DemoResult(data:DemoData = DemoData()):SourceResult<DemoData>(data=data)
-class DemoContext(query: DemoRequest = DemoRequest(), result:DemoResult = DemoResult()):SourceContext<DemoQuery,DemoData>(query=query,result=result){}
+class DemoContext(query: DemoRequest = DemoRequest(), result: DemoResult = DemoResult()) : SourceContext<DemoQuery, DemoData>(query = query, result = result)
 
 
