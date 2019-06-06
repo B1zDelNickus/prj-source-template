@@ -20,7 +20,7 @@ object BusInitializer {
     }
 
     /**
-     * Запуск rabbit сервиса
+     * Запуск bus сервиса
      */
     fun start(
         rabbitHost: String? = null,
@@ -29,9 +29,9 @@ object BusInitializer {
         rabbitPassword: String? = null
     ) {
         val busNavigator = createBusNavigator(rabbitHost, rabbitPort, rabbitUser, rabbitPassword)
-        val rabbitListenerService = createDefaultRabbitListenerService(busNavigator)
+        val rabbitListenerService = createDefaultBusListenerService(busNavigator)
         rabbitListenerService.start()
-        val rabbitSenderService = createDefaultRabbitSenderService(busNavigator)
+        val rabbitSenderService = createDefaultBusSenderService(busNavigator)
 
         EnvProxy.Instance.set("busNavigator", busNavigator)
         EnvProxy.Instance.set("rabbitListenerService", rabbitListenerService)
@@ -59,7 +59,7 @@ object BusInitializer {
     /**
      * Создать BusListenerService
      */
-    private fun createDefaultRabbitListenerService(busNavigator: BusNavigator) = BusListenerService(
+    private fun createDefaultBusListenerService(busNavigator: BusNavigator) = BusListenerService(
         navigator = busNavigator,
         serviceName = DemoConstants.rabbitServiceName,
         serviceInputName = DemoConstants.rabbitServiceInputName,
@@ -70,7 +70,7 @@ object BusInitializer {
     /**
      * Создать BusSenderService
      */
-    private fun createDefaultRabbitSenderService(busNavigator: BusNavigator) = BusSenderService(
+    private fun createDefaultBusSenderService(busNavigator: BusNavigator) = BusSenderService(
         navigator = busNavigator,
         serviceName = DemoConstants.rabbitServiceName,
         serviceOutputName = DemoConstants.rabbitServiceOutputName
