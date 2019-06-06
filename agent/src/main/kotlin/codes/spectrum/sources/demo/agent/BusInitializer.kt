@@ -22,8 +22,13 @@ object BusInitializer {
     /**
      * Запуск rabbit сервиса
      */
-    fun start() {
-        val busNavigator = createBusNavigator()
+    fun start(
+        rabbitHost: String? = null,
+        rabbitPort: Int? = null,
+        rabbitUser: String? = null,
+        rabbitPassword: String? = null
+    ) {
+        val busNavigator = createBusNavigator(rabbitHost, rabbitPort, rabbitUser, rabbitPassword)
         val rabbitListenerService = createDefaultRabbitListenerService(busNavigator)
         rabbitListenerService.start()
         val rabbitSenderService = createDefaultRabbitSenderService(busNavigator)
