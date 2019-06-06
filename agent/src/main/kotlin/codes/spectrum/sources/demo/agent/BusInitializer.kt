@@ -41,7 +41,7 @@ object BusInitializer {
     /**
      * Создать BusNavigator
      */
-    private fun createBusNavigator(
+    fun createBusNavigator(
         rabbitHost: String? = null,
         rabbitPort: Int? = null,
         rabbitUser: String? = null,
