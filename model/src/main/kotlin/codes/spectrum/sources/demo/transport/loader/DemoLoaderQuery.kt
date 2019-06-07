@@ -1,5 +1,5 @@
 package codes.spectrum.sources.demo.transport.loader
 
-data class BalanceGksLoaderQuery(
+data class DemoLoaderQuery(
     val query: String = "query"
 )

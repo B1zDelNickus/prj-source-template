@@ -1,13 +1,13 @@
-package codes.spectrum.sources.demo.transport.loader
+package codes.spectrum.sources.demo.transport.crawler
 
 import codes.spectrum.sources.DebugMode
 import codes.spectrum.sources.SourceQuery
 
-class BalanceGksLoaderRequest(
-    query: BalanceGksLoaderQuery = BalanceGksLoaderQuery(),
+class DemoCrawlerRequest(
+    query: DemoCrawlerQuery = DemoCrawlerQuery(),
     debug: DebugMode = DebugMode(),
     timeout: Long = -1L
-) : SourceQuery<BalanceGksLoaderQuery>(query = query) {
+) : SourceQuery<DemoCrawlerQuery>(query = query) {
     init {
         this.debug = debug
         this.timeout = timeout

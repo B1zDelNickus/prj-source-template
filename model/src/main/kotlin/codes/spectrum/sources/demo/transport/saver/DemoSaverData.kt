@@ -1,5 +1,5 @@
 package codes.spectrum.sources.demo.transport.saver
 
-data class BalanceGksSaverData (
+data class DemoSaverData (
     val data: String = "data"
 )

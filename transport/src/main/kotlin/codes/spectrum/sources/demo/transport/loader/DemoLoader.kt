@@ -1,12 +1,13 @@
-package codes.spectrum.sources.demo.transport.saver
+package codes.spectrum.sources.demo.transport.loader
 
 import codes.spectrum.konveyor.DefaultKonveyorEnvironment
 import codes.spectrum.konveyor.konveyor
 import codes.spectrum.sources.config.IConfig
 import codes.spectrum.sources.core.SourceState
 
-class BalanceGksSaver : IBalanceGksSaverSource {
-    override suspend fun execute(context: BalanceGksSaverContext, config: IConfig) {
+class DemoLoader : IDemoLoaderSource {
+
+    override suspend fun execute(context: DemoLoaderContext, config: IConfig) {
         try {
             val env = DefaultKonveyorEnvironment
             konveyor.exec(context, env)
@@ -17,7 +18,7 @@ class BalanceGksSaver : IBalanceGksSaverSource {
     }
 
     companion object {
-        val konveyor = konveyor<BalanceGksSaverContext> {
+        val konveyor = konveyor<DemoLoaderContext> {
             exec {
                 result.status = SourceState.OK
             }

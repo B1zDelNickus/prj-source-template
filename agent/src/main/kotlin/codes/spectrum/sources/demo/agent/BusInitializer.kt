@@ -8,13 +8,22 @@ import codes.spectrum.sources.config.GlobalConfig
 import codes.spectrum.sources.config.get
 import codes.spectrum.sources.core.SourceState
 import codes.spectrum.sources.demo.DemoConstants
+import codes.spectrum.sources.demo.transport.bus.DemoCrawlerBusAdapter
+import codes.spectrum.sources.demo.transport.bus.DemoLoaderBusAdapter
 import codes.spectrum.sources.demo.transport.bus.sourceBus
+import codes.spectrum.sources.demo.transport.bus.DemoSaverBusAdapter
+import codes.spectrum.sources.demo.transport.exceptions.UnknownAgentTaskException
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 
 object BusInitializer {
-    private val defaultHandler: suspend (Message) -> SourceState = {
-        message: Message -> SourceState.OK
+    private val defaultHandler: suspend (Message) -> SourceState = { message: Message ->
+        val task = try { AgentMessageTask.valueOf(message.header.task.name) } catch (e: Throwable) { throw UnknownAgentTaskException("Unknown agent task exception", e) }
+        when(task) {
+            AgentMessageTask.CRAWL -> DemoCrawlerBusAdapter().execute(message)
+            AgentMessageTask.LOAD -> DemoLoaderBusAdapter().execute(message)
+            AgentMessageTask.SAVE -> DemoSaverBusAdapter().execute(message)
+        }
     }
 
     /**

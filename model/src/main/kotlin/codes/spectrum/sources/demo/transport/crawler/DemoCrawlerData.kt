@@ -1,5 +1,5 @@
 package codes.spectrum.sources.demo.transport.crawler
 
-data class BalanceGksCrawlerData (
+data class DemoCrawlerData (
     val data: String = "data"
 )

@@ -1,5 +1,5 @@
 package codes.spectrum.sources.demo.transport.saver
 
-data class BalanceGksSaverQuery(
+data class DemoSaverQuery(
     val query: String = "query"
 )
