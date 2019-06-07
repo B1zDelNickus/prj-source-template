@@ -7,12 +7,10 @@ import codes.spectrum.sources.config.EnvProxy
 import codes.spectrum.sources.config.GlobalConfig
 import codes.spectrum.sources.config.get
 import codes.spectrum.sources.core.SourceState
+import codes.spectrum.sources.demo.DemoConstants
+import codes.spectrum.sources.demo.transport.bus.sourceBus
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
-import codes.spectrum.sources.core.service.bus.BusListenerService
-import codes.spectrum.sources.core.service.bus.BusSenderService
-import codes.spectrum.sources.demo.DemoConstants
-import codes.spectrum.sources.demo.service.bus.*
 
 object BusInitializer {
     private val defaultHandler: suspend (Message) -> SourceState = {
@@ -61,9 +59,9 @@ object BusInitializer {
      */
     private fun createDefaultBusListenerService(busNavigator: BusNavigator) = BusListenerService(
         navigator = busNavigator,
-        serviceName = DemoConstants.rabbitServiceName,
-        serviceInputName = DemoConstants.rabbitServiceInputName,
-        serviceErrorName = DemoConstants.rabbitServiceErrorName,
+        serviceName = DemoConstants.DEFAULT_BUS_SERVICE_NAME,
+        serviceInputName = DemoConstants.DEFAULT_BUS_SERVICE_INPUT_NAME,
+        serviceErrorName = DemoConstants.DEFAULT_BUS_SERVICE_ERROR_NAME,
         handler = defaultHandler
     )
 
@@ -72,8 +70,8 @@ object BusInitializer {
      */
     private fun createDefaultBusSenderService(busNavigator: BusNavigator) = BusSenderService(
         navigator = busNavigator,
-        serviceName = DemoConstants.rabbitServiceName,
-        serviceOutputName = DemoConstants.rabbitServiceOutputName
+        serviceName = DemoConstants.DEFAULT_BUS_SERVICE_NAME,
+        serviceOutputName = DemoConstants.DEFAULT_BUS_SERVICE_OUTPUT_NAME
     )
 
 }

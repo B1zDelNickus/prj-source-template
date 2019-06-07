@@ -1,6 +1,8 @@
 package codes.spectrum.sources.demo.agent
 
 import codes.spectrum.sources.core.SourceDefinition
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import org.slf4j.LoggerFactory
 
 val InstanceLog = LoggerFactory.getLogger(SourceDefinition.Instance.serviceLoggerName)
@@ -10,6 +12,8 @@ fun main() {
         // Запуск bus сервиса
         BusInitializer.start()
 
+        // Запуск web сервера
+        embeddedServer(Netty, 8080, module = module).start(wait = true)
     }catch(e:Throwable){
         InstanceLog.error("Error agent ${SourceDefinition.Instance.name} (${SourceDefinition.Instance.code})",e)
     }finally {
