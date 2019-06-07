@@ -2,11 +2,15 @@ package codes.spectrum.sources.demo.transport.bus
 
 import codes.spectrum.message.Message
 import codes.spectrum.sources.core.SourceState
+import codes.spectrum.sources.core.transport.bus.IBusSourceAdapter
+import codes.spectrum.sources.core.transport.bus.getRequestDebug
+import codes.spectrum.sources.core.transport.bus.getRequestQuery
+import codes.spectrum.sources.core.transport.bus.getRequestTimeout
+import codes.spectrum.sources.core.transport.exceptions.IllegalMessageException
 import codes.spectrum.sources.demo.transport.crawler.DemoCrawler
 import codes.spectrum.sources.demo.transport.crawler.DemoCrawlerContext
 import codes.spectrum.sources.demo.transport.crawler.DemoCrawlerQuery
 import codes.spectrum.sources.demo.transport.crawler.DemoCrawlerRequest
-import codes.spectrum.sources.demo.transport.exceptions.IllegalMessageException
 import org.slf4j.LoggerFactory
 
 class DemoCrawlerBusAdapter : IBusSourceAdapter {
