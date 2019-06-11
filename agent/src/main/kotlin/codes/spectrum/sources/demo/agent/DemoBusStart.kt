@@ -1,19 +1,12 @@
 package codes.spectrum.sources.demo.agent
 
 import codes.spectrum.bus.builder.bus
-import codes.spectrum.bus.integration.BusNavigator
-import codes.spectrum.message.Message
-import codes.spectrum.message.MessageBody
-import codes.spectrum.message.MessageHeader
+import codes.spectrum.message.queue.RabbitConstants
 import codes.spectrum.sources.config.GlobalConfig
 import codes.spectrum.sources.config.getOrDefault
 import codes.spectrum.sources.demo.DemoConstants
 import codes.spectrum.sources.demo.transport.bus.sourceBus
-import codes.spectrum.sources.demo.transport.crawler.DemoCrawlerRequest
 import kotlinx.coroutines.runBlocking
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory
-import org.springframework.amqp.rabbit.core.RabbitTemplate
-import java.util.*
 
 fun startBus() {
     bus {
@@ -27,7 +20,6 @@ fun startBus() {
         
         queue(DemoConstants.DEFAULT_BUS_CRAWLER_QUEUE) {
             handle {
-                println(DemoConstants.DEFAULT_BUS_CRAWLER_QUEUE)
                 serviceName = DemoConstants.DEFAULT_BUS_SERVICE_NAME
                 serviceInput = DemoConstants.DEFAULT_BUS_CRAWLER_SERVICE_INPUT
                 serviceError = DemoConstants.DEFAULT_BUS_CRAWLER_SERVICE_ERROR
