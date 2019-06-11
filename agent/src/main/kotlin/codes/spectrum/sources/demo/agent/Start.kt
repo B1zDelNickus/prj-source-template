@@ -1,5 +1,9 @@
 package codes.spectrum.sources.demo.agent
 
+import codes.spectrum.bus.builder.bus
+import codes.spectrum.message.queue.RabbitConstants
+import codes.spectrum.sources.config.GlobalConfig
+import codes.spectrum.sources.config.getOrDefault
 import codes.spectrum.sources.core.SourceDefinition
 import codes.spectrum.sources.demo.transport.bus.sourceBus
 import io.ktor.server.engine.embeddedServer
@@ -13,13 +17,24 @@ fun main() {
     InstanceLog.info("Enter agent ${SourceDefinition.Instance.name} (${SourceDefinition.Instance.code})")
     try {
         // Запуск bus сервиса
-        DemoBusInitializer(
-            bus = sourceBus,
-            serviceName = DemoConstants.DEFAULT_BUS_SERVICE_NAME,
-            serviceInputName = DemoConstants.DEFAULT_BUS_SERVICE_INPUT_NAME,
-            serviceOutputName = DemoConstants.DEFAULT_BUS_SERVICE_OUTPUT_NAME,
-            serviceErrorName = DemoConstants.DEFAULT_BUS_SERVICE_ERROR_NAME
-        ).start()
+        bus {
+            connection {
+                host = GlobalConfig.getOrDefault("rabbitHost", RabbitConstants.DEFAULT_PROD_HOST)
+                port = GlobalConfig.getOrDefault("rabbitPort", RabbitConstants.DEFAULT_PROD_PORT)
+                user = GlobalConfig.getOrDefault("rabbitUser", RabbitConstants.DEFAULT_PROD_USER)
+                password = GlobalConfig.getOrDefault("rabbitPassword", RabbitConstants.DEFAULT_PROD_PASS)
+            }
+            bus(sourceBus)
+            queue(DemoConstants.DEFAULT_BUS_CRAWLER_QUEUE) {
+                handle {
+                    serviceName = DemoConstants.DEFAULT_BUS_SERVICE_NAME
+                    serviceInput = DemoConstants.DEFAULT_BUS_CRAWLER_SERVICE_INPUT
+                    serviceError = DemoConstants.DEFAULT_BUS_CRAWLER_SERVICE_ERROR
+
+                    DemoCrawlerBus.Instanse.execute(this)
+                }
+            }
+        }
 
         // Запуск web сервера
         embeddedServer(Netty, 8080, module = module).start(wait = true)

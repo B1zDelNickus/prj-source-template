@@ -8,7 +8,6 @@ import io.ktor.application.Application
 import io.ktor.routing.route
 import io.ktor.routing.routing
 
-
 val module: Application.() -> Unit = {
     setupNegotiation()
     setupCors()
