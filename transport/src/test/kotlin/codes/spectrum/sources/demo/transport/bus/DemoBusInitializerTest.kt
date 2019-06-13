@@ -19,7 +19,7 @@ class DemoBusInitializerTest: StringSpec({
      * Локально можно запустить так
      * docker run -p 5672:5672 -e RABBITMQ_DEFAULT_USER=test -e RABBITMQ_DEFAULT_PASS=test rabbitmq:3
      */
-    "bus initialize".config(enabled = true) {
+    "bus initialize".config(enabled = false) {
         val host = "localhost"
         val port = 5672
         val user = "test"
@@ -37,9 +37,9 @@ class DemoBusInitializerTest: StringSpec({
 
         val messageToSend = "message"
 
-        busNavigator.send(DemoConstants.DEFAULT_BUS_SERVICE_NAME, DemoConstants.DEFAULT_BUS_CRAWLER_SERVICE_INPUT, messageToSend)
+        busNavigator.send(DemoConstants.DEFAULT_BUS_AGENT_SERVICE_NAME, DemoConstants.DEFAULT_BUS_AGENT_SERVICE_INPUT, messageToSend)
         println("Послано $messageToSend")
-        val readMessage = busNavigator.read(DemoConstants.DEFAULT_BUS_SERVICE_NAME, DemoConstants.DEFAULT_BUS_CRAWLER_SERVICE_INPUT).getBodyAsString(charSet = "UTF-8")
+        val readMessage = busNavigator.read(DemoConstants.DEFAULT_BUS_AGENT_SERVICE_NAME, DemoConstants.DEFAULT_BUS_AGENT_SERVICE_INPUT).getBodyAsString(charSet = "UTF-8")
         println("Прочитано $readMessage")
 
         readMessage shouldBe messageToSend
