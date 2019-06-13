@@ -9,8 +9,7 @@ class DemoLoader : IDemoLoaderSource {
 
     override suspend fun execute(context: DemoLoaderContext, config: IConfig) {
         try {
-            val env = DefaultKonveyorEnvironment
-            konveyor.exec(context, env)
+            konveyor.exec(context, config)
         } catch (exception: Throwable) {
             context.result.error = exception
             context.result.status = SourceState.GENERAL_ERROR
