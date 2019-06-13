@@ -1,6 +1,5 @@
 package codes.spectrum.sources.demo.transport.loader
 
-import codes.spectrum.konveyor.DefaultKonveyorEnvironment
 import codes.spectrum.konveyor.konveyor
 import codes.spectrum.sources.config.IConfig
 import codes.spectrum.sources.core.SourceState
