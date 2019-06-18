@@ -11,7 +11,13 @@ fun main() {
     try {
         embeddedServer(Netty
             , 8080
-            , module = module)
+            , module = module
+            , configure = {
+                connectionGroupSize = 5
+                workerGroupSize = 5
+                callGroupSize = 8
+            }
+        )
             .start(wait = true)
     }catch(e:Throwable){
         InstanceLog.error("Error source ${SourceDefinition.Instance.name} (${SourceDefinition.Instance.code})",e)
