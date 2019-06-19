@@ -1,27 +1,8 @@
 package codes.spectrum.sources.demo.service
 
-import codes.spectrum.sources.core.SourceDefinition
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
-import org.slf4j.LoggerFactory
+import codes.spectrum.sources.core.service.runServer
 
-val InstanceLog = LoggerFactory.getLogger(SourceDefinition.Instance.serviceLoggerName)
+
 fun main() {
-    InstanceLog.info("Enter source ${SourceDefinition.Instance.name} (${SourceDefinition.Instance.code})")
-    try {
-        embeddedServer(Netty
-            , 8080
-            , module = module
-            , configure = {
-                connectionGroupSize = 5
-                workerGroupSize = 5
-                callGroupSize = 8
-            }
-        )
-            .start(wait = true)
-    }catch(e:Throwable){
-        InstanceLog.error("Error source ${SourceDefinition.Instance.name} (${SourceDefinition.Instance.code})",e)
-    }finally {
-        InstanceLog.info("Finish source ${SourceDefinition.Instance.name} (${SourceDefinition.Instance.code})")
-    }
+    runServer(module = module)
 }
