@@ -1,6 +1,6 @@
 
-# Специальный образ, объединяющий alpine, docker, openjdk-8, gradle
-image: dpershin/gitlab-gradle-docker:j11.0.3-g5.3.1
+# Специальный образ, объединяющий alpine, docker, openjdk-8/11, gradle
+image: "$BUILD_IMAGE"
 
 # Требуется для использования докера внутри сборки
 services:
@@ -22,7 +22,7 @@ before_script:
 # Основная сборочная фаза, с компиляцией и тестированием
 test:
   stage: test
-  script: gradle build
+  script: gradle build --refresh-dependencies
   cache:
     # Кэш привязываем к бранчу
     key: "$CI_COMMIT_REF_NAME"
@@ -50,7 +50,7 @@ deploy-snapshot:
       - .gradle
   script:
     # опция --build-cache обязательна для оптимизации этой сборки
-    - gradle deploy --build-cache -Prelease -Ptag=dev
+    - gradle deploy --build-cache -Prelease -Ptag=dev --refresh-dependencies
 
 # Фаза публикации докеров в репозитории, работает только для бранча master
 # в явном виде заблокирована пере-сборка кода, кэш не всегда отрабаотывает
@@ -68,5 +68,5 @@ deploy-release:
       - .gradle
   script:
     # опция --build-cache обязательна для оптимизации этой сборки
-    - gradle deploy --build-cache -Prelease -Ptag=master
+    - gradle deploy --build-cache -Prelease -Ptag=master --refresh-dependencies
         

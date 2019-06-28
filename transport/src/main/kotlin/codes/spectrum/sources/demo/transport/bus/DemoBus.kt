@@ -32,7 +32,7 @@ private val port = GlobalConfig.getOrDefault("rabbitPort", RabbitConstants.DEFAU
 private val user = GlobalConfig.getOrDefault("rabbitUser", RabbitConstants.DEFAULT_PROD_USER)
 private val password = GlobalConfig.getOrDefault("rabbitPassword", RabbitConstants.DEFAULT_PROD_PASS)
 
-private val connectionFactory by lazy { CachingConnectionFactory(host, port).apply {
+val connectionFactory by lazy { CachingConnectionFactory(host, port).apply {
     setUsername(user)
     setPassword(password)
 }
