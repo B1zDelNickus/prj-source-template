@@ -1,6 +1,6 @@
 package codes.spectrum.sources.demo.service
 
-import codes.spectrum.sources.core.service.RestSourceAdapter
+import codes.spectrum.sources.core.rest.RestSourceAdapter
 import codes.spectrum.sources.demo.DemoContext
 import codes.spectrum.sources.demo.IDemoSource
 import codes.spectrum.sources.demo.model.DemoData
