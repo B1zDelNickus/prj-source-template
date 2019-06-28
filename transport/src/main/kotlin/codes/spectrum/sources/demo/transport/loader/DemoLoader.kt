@@ -3,7 +3,7 @@ package codes.spectrum.sources.demo.transport.loader
 import codes.spectrum.konveyor.IKonveyorEnvironment
 import codes.spectrum.konveyor.konveyor
 import codes.spectrum.sources.config.IConfig
-import codes.spectrum.sources.core.SourceState
+import codes.spectrum.api.SourceState
 
 class DemoLoader : IDemoLoaderSource {
 

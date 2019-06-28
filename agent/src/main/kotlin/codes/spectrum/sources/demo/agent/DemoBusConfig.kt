@@ -1,13 +1,22 @@
 package codes.spectrum.sources.demo.agent
 
 import codes.spectrum.bus.builder.bus
+import codes.spectrum.bus.rabbit.BusRabbitInitializer
 import codes.spectrum.message.queue.toMessage
+import codes.spectrum.sources.config.GlobalConfig
+import codes.spectrum.sources.config.getOrDefault
 import codes.spectrum.sources.core.agent.AgentMessageTask
 import codes.spectrum.sources.demo.DemoConstants
+import codes.spectrum.sources.demo.transport.bus.connectionFactory
 import codes.spectrum.sources.demo.transport.bus.navigator
+import codes.spectrum.sources.demo.transport.bus.sourceBus
 
 object DemoBusConfig {
     fun startBus() {
+        if (GlobalConfig.getOrDefault("initRabbit", "false").toBoolean()) {
+            BusRabbitInitializer(connectionFactory, sourceBus, true)
+        }
+
         bus {
             navigator(navigator)
 
