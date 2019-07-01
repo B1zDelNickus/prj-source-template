@@ -6,6 +6,6 @@ import codes.spectrum.sources.demo.transport.loader.*
 class DemoLoaderBus(internalSource: IDemoLoaderSource = DemoLoader()):
     BusSourceAdapter<DemoLoaderQuery, DemoLoaderData>(internalSource, DemoLoaderContext::class.java){
     companion object{
-        val Instanse by lazy{ DemoLoaderBus() }
+        val Instance by lazy{ DemoLoaderBus() }
     }
 }

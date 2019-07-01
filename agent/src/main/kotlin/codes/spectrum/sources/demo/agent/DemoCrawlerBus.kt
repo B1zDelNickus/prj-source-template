@@ -6,6 +6,6 @@ import codes.spectrum.sources.demo.transport.crawler.*
 class DemoCrawlerBus(internalSource: IDemoCrawlerSource = DemoCrawler()):
     BusSourceAdapter<DemoCrawlerQuery, DemoCrawlerData>(internalSource, DemoCrawlerContext::class.java){
     companion object{
-        val Instanse by lazy{ DemoCrawlerBus() }
+        val Instance by lazy{ DemoCrawlerBus() }
     }
 }
