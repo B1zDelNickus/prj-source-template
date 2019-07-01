@@ -10,8 +10,11 @@ import codes.spectrum.sources.demo.DemoConstants
 import codes.spectrum.sources.demo.transport.bus.connectionFactory
 import codes.spectrum.sources.demo.transport.bus.navigator
 import codes.spectrum.sources.demo.transport.bus.sourceBus
+import org.slf4j.LoggerFactory
 
 object DemoBusConfig {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     fun startBus() {
         if (GlobalConfig.getOrDefault("initRabbit", "false").toBoolean()) {
             BusRabbitInitializer(connectionFactory, sourceBus, true)
@@ -26,16 +29,19 @@ object DemoBusConfig {
                     serviceInput = DemoConstants.DEFAULT_BUS_AGENT_SERVICE_INPUT
                     serviceError = DemoConstants.DEFAULT_BUS_AGENT_SERVICE_ERROR
 
-                    val task = AgentMessageTask.valueOf(message.toMessage().header.task.name.toUpperCase())
-                    when(task) {
+                    val messageTask = message.toMessage().header.task.name
+                    when(AgentMessageTask.getByName(messageTask)) {
                         AgentMessageTask.CRAWL -> {
-                            DemoCrawlerBus.Instanse.execute(this)
-                        }
-                        AgentMessageTask.SAVE -> {
-                            DemoSaverBus.Instanse.execute(this)
+                            DemoCrawlerBus.Instance.execute(this)
                         }
                         AgentMessageTask.LOAD -> {
-                            DemoCrawlerBus.Instanse.execute(this)
+                            DemoLoaderBus.Instance.execute(this)
+                        }
+                        AgentMessageTask.SAVE -> {
+                            DemoSaverBus.Instance.execute(this)
+                        }
+                        AgentMessageTask.NONE -> {
+                            logger.error("Unknown task $messageTask")
                         }
                     }
                 }
