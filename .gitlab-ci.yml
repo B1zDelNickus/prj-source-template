@@ -17,6 +17,7 @@ stages:
 
 # Домашняя директория Gradle должна быть направлена именно на текущую .gradle проекта, до запуска
 before_script:
+  - echo "${CI_REGISTRY_PASSWORD}" | docker login -u "${CI_REGISTRY_USER}" --password-stdin ${CI_REGISTRY}
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
 # Основная сборочная фаза, с компиляцией и тестированием
