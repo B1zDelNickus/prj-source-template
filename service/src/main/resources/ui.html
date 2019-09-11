@@ -34,14 +34,15 @@ class SourceServicePage extends React.Component {
    constructor(props) {
     super(props);
     const baseurl = window.location.hostname;
+    const sourceDomain = "source-domain";
     this.systems = {
        DEV : {
           name:"Стейдж",
-          url:"http://rest-dev.sources.ssc.int"
+          url:"https://dev-" + sourceDomain + ".spectrum.codes"
        },
        PROD : {
           name:"Прод",
-          url:"https://sources-extremists.spectrum.codes"
+          url:"https://" + sourceDomain + ".spectrum.codes"
        },
        LOCAL : {
           name:"Локальный",
@@ -134,8 +135,18 @@ class SourceServicePage extends React.Component {
   })
   .then(function(myJson) {
         self.setState({data:myJson})
-      
-  });
+
+  }).catch(function (error) {
+        self.setState({
+            data: {
+                result: {
+                    error: {
+                        "Ошибка при выполнении запроса": error
+                    }
+                }
+            }
+        })
+    });
   }
 
   _input(code,name,values,type){
